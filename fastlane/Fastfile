@@ -21,7 +21,7 @@ platform :android do
     gradle(task: "test")
   end
 
-desc "Submit a new Dev Build"
+desc "Build APK with Development Environment"
   lane :build_dev do
     gradle(task: "clean assembleDebug")
     deploy_to_firebase
@@ -48,9 +48,39 @@ desc "Submit a new Dev Build"
         )
       end
 
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
-  end
+  desc "Build APK With Production Environment"
+    lane :build_prod do
+      g = google_play_track_version_codes
+      gb = google_play_track_version_codes(track: 'beta')
+      ga = google_play_track_version_codes(track: 'alpha')
+      gi = google_play_track_version_codes(track: 'internal')
+      max_value = [g[0].to_i, gb[0].to_i, ga[0].to_i, gi[0].to_i].max
+      version_updated = max_value + 1
+      increment_version_code(gradle_file_path: "app/build.gradle", version_code: version_updated.to_i)
+      gradle(
+        task: "clean assemble",
+        build_type: "Release",
+        flavor: "",
+        print_command: false,
+        properties: {
+          "android.injected.signing.store.file" => "cicd_keystore.jks",
+          "android.injected.signing.store.password" => ENV['KEY_PASSWORD'],
+          "android.injected.signing.key.alias" => ENV['KEY_ALIAS'],
+          "android.injected.signing.key.password" => ENV['KEY_PASSWORD'],
+        }
+      )
+      #deploy_to_firebase
+      deploy_to_internal_test
+    end
+
+    desc "Deploy to Play Store Internal Test"
+        lane :deploy_to_internal_test do
+        supply(
+            track: "internal",
+            skip_upload_images: true,
+            skip_upload_screenshots: true,
+            apk: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH],
+        )
+    end
+
 end
