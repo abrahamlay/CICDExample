@@ -1,0 +1,86 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+desc "Build APK with Development Environment"
+  lane :build_dev do
+    gradle(task: "clean assembleDebug")
+    deploy_to_firebase
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do
+    gradle(task: "clean assembleRelease")
+    crashlytics
+  
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Deploy to Firebase App Distribution"
+      lane :deploy_to_firebase do
+        firebase_app_distribution(
+           app: ENV['FIREBASE_APP_ID'],
+           firebase_cli_token: ENV['FIREBASE_TOKEN'],
+           groups_file: ENV['FIREBASE_TESTER_GROUPS'],
+           release_notes_file: ENV['FIREBASE_RELEASE_NOTES'],
+        )
+      end
+
+  desc "Build APK With Production Environment"
+    lane :build_prod do
+      g = google_play_track_version_codes
+      gb = google_play_track_version_codes(track: 'beta')
+      ga = google_play_track_version_codes(track: 'alpha')
+      gi = google_play_track_version_codes(track: 'internal')
+      max_value = [g[0].to_i, gb[0].to_i, ga[0].to_i, gi[0].to_i].max
+      version_updated = max_value + 1
+      increment_version_code(gradle_file_path: "app/build.gradle", version_code: version_updated.to_i)
+      gradle(
+        task: "clean assemble",
+        build_type: "Release",
+        flavor: "",
+        print_command: false,
+        properties: {
+          "android.injected.signing.store.file" => "cicd_keystore.jks",
+          "android.injected.signing.store.password" => ENV['KEY_PASSWORD'],
+          "android.injected.signing.key.alias" => ENV['KEY_ALIAS'],
+          "android.injected.signing.key.password" => ENV['KEY_PASSWORD'],
+        }
+      )
+      #deploy_to_firebase
+      deploy_to_internal_test
+    end
+
+    desc "Deploy to Play Store Internal Test"
+        lane :deploy_to_internal_test do
+        supply(
+            track: "internal",
+            skip_upload_images: true,
+            skip_upload_screenshots: true,
+            apk: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH],
+        )
+    end
+
+end
