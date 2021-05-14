@@ -24,9 +24,17 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-     
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7.2'
+
+      - name: Setup Fastlane
+        run: bundle install
+
       # Runs a set of commands using the runners shell
       - name: Build Development APK and Deploy to Firebase App Distribution
         run: bundle exec fastlane android build_dev
