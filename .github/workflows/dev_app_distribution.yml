@@ -32,10 +32,10 @@ jobs:
         run: bundle exec fastlane android build_dev
         env:
           PLAY_STORE_CREDENTIALS: ${{ secrets.PLAY_STORE_CREDENTIALS }}
-          KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID_ANDROID_DEV }}
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_CLI_TOKEN }}
+          KEYSTORE_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_TESTER_GROUPS: FirebaseAppDistributionConfig/groups_dev.txt
           FIREBASE_RELEASE_NOTES: FirebaseAppDistributionConfig/release_notes_dev.txt
 
