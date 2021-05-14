@@ -73,7 +73,7 @@ desc "Build APK with Development Environment"
         task: "clean assemble",
         build_type: "Release",
         flavor: "",
-        print_command: false,
+        print_command: true,
         properties: {
           "android.injected.signing.store.file" => "cicd_keystore.jks",
           "android.injected.signing.store.password" => ENV['KEY_PASSWORD'],
