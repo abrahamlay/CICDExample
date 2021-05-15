@@ -56,9 +56,10 @@ jobs:
 
       - name: Install bundle
         run: |
-            gem install bundler:2.1.2
-            bundle config path vendor/bundle
-            bundle install --jobs 4 --retry 3
+          gem install bundler:2.1.4
+          bundle update --bundler
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
       # Runs a set of commands using the runners shell
       - name: Build Development APK and Deploy to Firebase App Distribution
