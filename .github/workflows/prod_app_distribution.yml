@@ -29,9 +29,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '2.7.2'
-
-      - name: Setup Fastlane
-        run: bundle install
         
       - name: Cache Ruby - Bundler
         uses: actions/cache@v2
@@ -58,7 +55,8 @@ jobs:
 
       - name: Install bundle
         run: |
-          gem install bundler:2.1.2
+          gem install bundler:2.1.4
+          bundle update --bundler
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 

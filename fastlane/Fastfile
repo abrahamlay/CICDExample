@@ -23,7 +23,19 @@ platform :android do
 
 desc "Build APK with Development Environment"
   lane :build_dev do
-    gradle(task: "clean assembleDebug")
+    # gradle(task: "clean assembleDebug")
+    gradle(
+            task: "clean assemble",
+            build_type: "Debug",
+            flavor: "",
+            print_command: true,
+            properties: {
+              "android.injected.signing.store.file" => "cicd_keystore.jks",
+              "android.injected.signing.store.password" => ENV['KEY_PASSWORD'],
+              "android.injected.signing.key.alias" => ENV['KEY_ALIAS'],
+              "android.injected.signing.key.password" => ENV['KEY_PASSWORD'],
+            }
+          )
     deploy_to_firebase
     # sh "your_script.sh"
     # You can also use other beta testing services here
@@ -61,7 +73,7 @@ desc "Build APK with Development Environment"
         task: "clean assemble",
         build_type: "Release",
         flavor: "",
-        print_command: false,
+        print_command: true,
         properties: {
           "android.injected.signing.store.file" => "cicd_keystore.jks",
           "android.injected.signing.store.password" => ENV['KEY_PASSWORD'],
@@ -76,6 +88,7 @@ desc "Build APK with Development Environment"
     desc "Deploy to Play Store Internal Test"
         lane :deploy_to_internal_test do
         supply(
+            release_status: "draft",
             track: "internal",
             skip_upload_images: true,
             skip_upload_screenshots: true,
