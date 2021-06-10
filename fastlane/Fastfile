@@ -25,7 +25,7 @@ desc "Build APK with Development Environment"
   lane :build_dev do
     # gradle(task: "clean assembleDebug")
     gradle(
-            task: "clean assemble",
+            task: "clean bundle",
             build_type: "Debug",
             flavor: "",
             print_command: true,
