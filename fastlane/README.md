@@ -25,7 +25,7 @@ Runs all the tests
 ```
 fastlane android build_dev
 ```
-Submit a new Dev Build
+Build APK with Development Environment
 ### android beta
 ```
 fastlane android beta
@@ -36,11 +36,16 @@ Submit a new Beta Build to Crashlytics Beta
 fastlane android deploy_to_firebase
 ```
 Deploy to Firebase App Distribution
-### android deploy
+### android build_prod
 ```
-fastlane android deploy
+fastlane android build_prod
 ```
-Deploy a new version to the Google Play
+Build APK With Production Environment
+### android deploy_to_internal_test
+```
+fastlane android deploy_to_internal_test
+```
+Deploy to Play Store Internal Test
 
 ----
 
