@@ -37,6 +37,16 @@ desc "Build APK with Development Environment"
               "android.injected.signing.key.password" => ENV['KEY_PASSWORD'],
             }
           )
+          bundletool(
+                ks_path: "cicd_keystore.jks",
+                ks_password: ENV['KEY_PASSWORD'],
+                ks_key_alias: ENV['KEY_ALIAS'],
+                ks_key_alias_password: ENV['KEY_PASSWORD'],
+                bundletool_version: '1.5.0',
+                aab_path: "app/build/outputs/bundle/debug/app-debug.aab",
+                apk_output_path: "app/build/outputs/apk/debug/app-debug-universal.apk",
+                verbose: true
+              )
     deploy_to_firebase
     # sh "your_script.sh"
     # You can also use other beta testing services here
@@ -55,6 +65,7 @@ desc "Build APK with Development Environment"
       lane :deploy_to_firebase do
         firebase_app_distribution(
            app: ENV['FIREBASE_APP_ID'],
+           apk_path: "app/build/outputs/apk/debug/app-debug-universal.apk"
            firebase_cli_token: ENV['FIREBASE_TOKEN'],
            groups_file: ENV['FIREBASE_TESTER_GROUPS'],
            release_notes_file: ENV['FIREBASE_RELEASE_NOTES'],
