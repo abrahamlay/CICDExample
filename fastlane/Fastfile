@@ -11,8 +11,8 @@
 #
 
 # Uncomment the line if you want fastlane to automatically update itself
-update_fastlane
-update_plugins
+#update_fastlane
+#fastlane update_plugins
 
 default_platform(:android)
 
