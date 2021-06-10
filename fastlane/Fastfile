@@ -65,7 +65,7 @@ desc "Build APK with Development Environment"
       lane :deploy_to_firebase do
         firebase_app_distribution(
            app: ENV['FIREBASE_APP_ID'],
-           apk_path: "app/build/outputs/apk/debug/app-debug-universal.apk"
+           apk_path: "app/build/outputs/apk/debug/app-debug-universal.apk",
            firebase_cli_token: ENV['FIREBASE_TOKEN'],
            groups_file: ENV['FIREBASE_TESTER_GROUPS'],
            release_notes_file: ENV['FIREBASE_RELEASE_NOTES'],
