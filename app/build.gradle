@@ -29,6 +29,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+        dev {
+            buildConfigField "String", "ENV_NAME", String.format("\"%s\"", "dev")
+        }
+        staging {
+            buildConfigField "String", "ENV_NAME", String.format("\"%s\"", "staging")
+        }
+        hotfix {
+            buildConfigField "String", "ENV_NAME", String.format("\"%s\"", "hotfix")
+        }
+        production {
+            buildConfigField "String", "ENV_NAME", String.format("\"%s\"", "production")
+        }
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
