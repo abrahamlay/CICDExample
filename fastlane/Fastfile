@@ -42,7 +42,7 @@ desc "Build APK with Development Environment"
                 ks_key_alias: ENV['KEY_ALIAS'],
                 ks_key_alias_password: ENV['KEY_PASSWORD'],
                 bundletool_version: '1.5.0',
-                aab_path: "app/build/outputs/bundle/debug/app-debug.aab",
+                aab_path: lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH],
                 apk_output_path: "app/build/outputs/apk/debug/app-debug-universal.apk",
                 verbose: true
               )
