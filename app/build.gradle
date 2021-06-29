@@ -29,17 +29,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    flavorDimensions "dev"
     productFlavors {
         dev {
+            dimension "dev"
             buildConfigField "String", "ENV_NAME", String.format("\"%s\"", "dev")
         }
         staging {
+            dimension "dev"
             buildConfigField "String", "ENV_NAME", String.format("\"%s\"", "staging")
         }
         hotfix {
+            dimension "dev"
             buildConfigField "String", "ENV_NAME", String.format("\"%s\"", "hotfix")
         }
         production {
+            dimension "dev"
             buildConfigField "String", "ENV_NAME", String.format("\"%s\"", "production")
         }
     }
