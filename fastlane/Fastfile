@@ -28,7 +28,6 @@ desc "Build APK with Development Environment"
     gradle(
             task: "clean bundle",
             build_type: "Debug",
-            flavor: "",
             print_command: true,
             properties: {
               "android.injected.signing.store.file" => "cicd_keystore.jks",
